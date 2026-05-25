@@ -74,9 +74,9 @@ function getDeviceInfos() {
 		const lines = fs.readFileSync(path.join(logPath, file), 'utf-8').split('\n');
 		if (lines.length >= 500) {
 			// Keep the last 500 lines
-			fs.writeFileSync(path.join(logPath, file), lines.slice(-500).join('\n'));
+			fs.writeFileSync(path.join(logPath, file), [...lines].slice(-500).join('\n'));
 		}
-		const lastLine = lines.at(-1);
+		const lastLine = lines.at(-2);
 		const x = lastLine.split('\t').splice(0);
 		out.push({
 			deviceMac,
