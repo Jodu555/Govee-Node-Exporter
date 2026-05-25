@@ -45,6 +45,7 @@ const gaugeHumi = new client.Gauge({
 		const deviceInfos = getDeviceInfos();
 		console.log(deviceInfos);
 		deviceInfos.forEach((d) => {
+			govee;
 			this.set({ deviceName: d.deviceName, deviceMac: d.deviceMac }, parseFloat(d.values[2]));
 		});
 	},
@@ -69,21 +70,21 @@ function getDeviceInfos() {
 	const dateStr = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
 	const files = fs.readdirSync(logPath).filter((x) => x.includes(dateStr));
 
-		files.forEach((file) => {
-			const deviceMac = file.split('-')[1];
-			const lines = fs.readFileSync(path.join(logPath, file), 'utf-8').split('\n');
-			if (lines.length >= 500) {
-				// Keep the last 500 lines
-				fs.writeFileSync(path.join(logPath, file), lines.slice(-500).join('\n'));
-			}
-			const lastLine = lines.at(-1);
-			const x = lastLine.split('\t').splice(0);
-			out.push({
-				deviceMac,
-				deviceName: deviceReMapper[deviceMac],
-				values: x,
-			});
+	files.forEach((file) => {
+		const deviceMac = file.split('-')[1];
+		const lines = fs.readFileSync(path.join(logPath, file), 'utf-8').split('\n');
+		if (lines.length >= 500) {
+			// Keep the last 500 lines
+			fs.writeFileSync(path.join(logPath, file), lines.slice(-500).join('\n'));
+		}
+		const lastLine = lines.at(-1);
+		const x = lastLine.split('\t').splice(0);
+		out.push({
+			deviceMac,
+			deviceName: deviceReMapper[deviceMac],
+			values: x,
 		});
+	});
 	return out;
 }
 

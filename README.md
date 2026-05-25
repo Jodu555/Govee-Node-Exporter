@@ -11,6 +11,7 @@ A simple Prometheus exporter for Govee temperature and humidity sensors.
 
 ## Prerequisites
 
+- [GoveeBTTempLogger](https://github.com/wcbonner/GoveeBTTempLogger) - Required to generate the log files that this exporter reads
 - Node.js (v12 or higher)
 - Log files in `/var/log/goveebttemplogger` with naming pattern: `*-<MAC_ADDRESS>-*.log`
 - Log files must contain tab-separated values where:
@@ -38,11 +39,13 @@ The exporter can be configured by modifying the following constants in `src/inde
 ## Usage
 
 Start the exporter:
+
 ```bash
 npm start
 ```
 
 For development with auto-restart:
+
 ```bash
 npm run dev
 ```
