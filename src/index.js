@@ -15,8 +15,6 @@ const logPath = '/var/log/goveebttemplogger';
 
 app.get('/metrics', async (req, res) => {
 	try {
-		await rotateLogFiles();
-
 		res.set('Content-Type', register.contentType);
 		res.end(await register.metrics());
 	} catch (ex) {
@@ -71,20 +69,21 @@ function getDeviceInfos() {
 	const dateStr = new Date().getFullYear() + '-' + String(new Date().getMonth() + 1).padStart(2, '0');
 	const files = fs.readdirSync(logPath).filter((x) => x.includes(dateStr));
 
-	files.forEach((file) => {
-		const deviceMac = file.split('-')[1];
-		const lines = fs.readFileSync(path.join(logPath, file), 'utf-8').split('\n');
-		if (lines.length >= 500) {
-			fs.writeFileSync(path.join(logPath, file), lines.slice(500).join('\n'));
-		}
-		const lastLine = lines.at(-1);
-		const x = lastLine.split('\t').splice(0);
-		out.push({
-			deviceMac,
-			deviceName: deviceReMapper[deviceMac],
-			values: x,
+		files.forEach((file) => {
+			const deviceMac = file.split('-')[1];
+			const lines = fs.readFileSync(path.join(logPath, file), 'utf-8').split('\n');
+			if (lines.length >= 500) {
+				// Keep the last 500 lines
+				fs.writeFileSync(path.join(logPath, file), lines.slice(-500).join('\n'));
+			}
+			const lastLine = lines.at(-1);
+			const x = lastLine.split('\t').splice(0);
+			out.push({
+				deviceMac,
+				deviceName: deviceReMapper[deviceMac],
+				values: x,
+			});
 		});
-	});
 	return out;
 }
 
