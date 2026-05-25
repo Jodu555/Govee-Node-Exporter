@@ -45,7 +45,6 @@ const gaugeHumi = new client.Gauge({
 		const deviceInfos = getDeviceInfos();
 		console.log(deviceInfos);
 		deviceInfos.forEach((d) => {
-			govee;
 			this.set({ deviceName: d.deviceName, deviceMac: d.deviceMac }, parseFloat(d.values[2]));
 		});
 	},
