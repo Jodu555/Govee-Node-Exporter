@@ -1,7 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
+const morgan = require('morgan');
 const app = express();
+app.use(morgan('dev'));
 
 const client = require('prom-client');
 const collectDefaultMetrics = client.collectDefaultMetrics;
