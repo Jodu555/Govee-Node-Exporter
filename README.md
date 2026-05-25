@@ -72,4 +72,4 @@ scrape_configs:
 
 ## License
 
-ISC
+MIT
