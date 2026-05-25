@@ -10,8 +10,18 @@ const register = new Registry();
 const prefix = 'govee_node_exporter_';
 collectDefaultMetrics({ prefix, register });
 
-const deviceReMapper = { A4C1384BEE9A: 'Zimmer' };
 const logPath = '/var/log/goveebttemplogger';
+let deviceReMapper = {};
+
+// Load device mapper from file
+const deviceMapperPath = path.join(__dirname, '..', 'deviceMapper.json');
+try {
+	const rawData = fs.readFileSync(deviceMapperPath, 'utf8');
+	deviceReMapper = JSON.parse(rawData);
+} catch (error) {
+	console.error('Error loading device mapper:', error.message);
+	fs.writeFileSync(deviceMapperPath, '{}');
+}
 
 app.get('/metrics', async (req, res) => {
 	try {
